@@ -1,0 +1,25 @@
+{
+  "fixture_notice": "FICTIONAL DEMO DATA ONLY. Not for clinical use.",
+  "patient": {"patient_id": "demo-patient-001", "display_name": "Asha Example"},
+  "encounters": [{
+    "encounter_id": "demo-encounter-001",
+    "occurred_at": "2026-10-12T09:00:00+05:30",
+    "clinician": "Dr Example",
+    "symptoms": ["fictional symptom A", "fictional symptom B"],
+    "note": "Synthetic record used to demonstrate a longitudinal timeline.",
+    "prescriptions": [
+      {"prescription_item_id": "demo-rx-001", "medicine_name": "Example Medicine A", "instructions": "Fictional instruction only", "quantity_prescribed": 10, "unit": "tablets"},
+      {"prescription_item_id": "demo-rx-002", "medicine_name": "Example Medicine B", "instructions": "Fictional instruction only", "quantity_prescribed": 5, "unit": "tablets"}
+    ]
+  }],
+  "dispensing_events": [{"dispense_event_id": "demo-dispense-001", "prescription_item_id": "demo-rx-001", "pharmacy": "Demo Pharmacy", "dispensed_at": "2026-10-12T12:00:00+05:30", "quantity_dispensed": 4, "unit": "tablets", "status": "partial", "source": "fictional pharmacy event"}],
+  "patient_reported_use": [],
+  "lab_reports": [],
+  "expected_summary": [
+    "A fictional visit on 12 October is recorded.",
+    "Example Medicine A was prescribed; a partial dispensing event for 4 tablets is recorded.",
+    "Example Medicine B was prescribed, but no dispensing event is present in this fixture.",
+    "The missing dispensing event does not prove the medicine was not obtained or taken.",
+    "This is synthetic data and not medical advice."
+  ]
+}
