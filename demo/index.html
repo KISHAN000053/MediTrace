@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meditrace — Interactive Concept Demo</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,sans-serif;color:#163047;background:#f3f7fa}*{box-sizing:border-box}body{margin:0}header{background:#123d54;color:white;padding:28px max(20px,calc((100% - 1100px)/2))}header h1{margin:0;font-size:2rem}header p{max-width:850px;line-height:1.5;color:#d9eaf1}.notice{background:#fff3cd;color:#654d00;padding:12px 18px;border-bottom:1px solid #f2d887;font-size:.92rem}.wrap{max-width:1100px;margin:24px auto;padding:0 18px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}.card{background:white;border:1px solid #dbe5eb;border-radius:14px;padding:18px;box-shadow:0 3px 14px #1630470c}.card h2{font-size:1.1rem;margin:0 0 12px}.muted{color:#617686;font-size:.9rem}.tag{display:inline-block;border-radius:99px;padding:4px 9px;background:#e1f4ef;color:#116451;font-size:.78rem;font-weight:700}.warn{background:#fff0e8;color:#97451b}.btn{border:0;border-radius:9px;background:#087e8b;color:white;padding:10px 13px;font-weight:700;cursor:pointer;margin:4px 4px 4px 0}.btn.secondary{background:#e5eef3;color:#163047}.btn:focus,input:focus,select:focus{outline:3px solid #f3b544}input,select{width:100%;padding:10px;border:1px solid #bacbd5;border-radius:8px;margin:5px 0 10px;font:inherit}label{font-size:.88rem;font-weight:650}.event{border-left:3px solid #0d8b8b;padding:7px 0 7px 12px;margin:12px 0}.event small{display:block;color:#617686}.event p{margin:4px 0}.pill{font-size:.76rem;background:#edf2f5;padding:3px 7px;border-radius:6px}.summary{line-height:1.55;background:#eef8f7;padding:14px;border-radius:10px}.footer{padding:25px 0;color:#617686;font-size:.85rem}#qr{font-family:monospace;overflow-wrap:anywhere;background:#f4f6f8;padding:10px;border-radius:8px}button{font:inherit}
+</style>
+</head>
+<body>
+<header><h1>Meditrace</h1><p>AI-assisted, QR-based healthcare record ecosystem · interactive concept model</p></header>
+<div class="notice"><strong>Prototype warning:</strong> This is a local, fictional demo. It has no real QR authorization, authentication, encryption, backend, medical AI, or clinical functionality. Do not enter real patient data.</div>
+<main class="wrap">
+<div class="grid">
+<section class="card">
+<h2>1 · Patient & consent</h2>
+<span class="tag">Simulated consent</span>
+<p class="muted">Generate a mock sharing token. A real version must authenticate providers and validate scope, expiry, and revocation.</p>
+<label for="role">Share with</label><select id="role"><option>Doctor</option><option>Pharmacist</option><option>Laboratory</option></select>
+<label for="hours">Access duration</label><select id="hours"><option value="1">1 hour</option><option value="24" selected>24 hours</option><option value="168">7 days</option></select>
+<button class="btn" id="makeToken">Generate demo token</button><button class="btn secondary" id="revoke">Revoke token</button>
+<p id="qr">No demo token generated.</p><p id="tokenStatus" class="muted">No active token.</p>
+</section>
+<section class="card">
+<h2>2 · Doctor visit</h2>
+<p class="muted">Add a fictional encounter and prescription item to the timeline.</p>
+<label for="symptom">Visit note / symptom</label><input id="symptom" value="Recurring headache (fictional)">
+<label for="medicine">Prescribed medicine (fictional)</label><input id="medicine" value="Example Medicine C">
+<label for="qty">Quantity prescribed</label><input id="qty" type="number" min="1" value="10">
+<button class="btn" id="addPrescription">Save demo prescription</button>
+<p class="muted">This records only local browser state for this demonstration.</p>
+</section>
+<section class="card">
+<h2>3 · Pharmacy dispensing</h2>
+<p class="muted">Record what the pharmacy says it supplied. This is deliberately separate from the prescription.</p>
+<label for="rxSelect">Prescription item</label><select id="rxSelect"></select>
+<label for="dispensed">Quantity dispensed</label><input id="dispensed" type="number" min="0" value="4">
+<button class="btn" id="dispense">Record dispensing</button>
+<p class="muted">A dispensing record does not prove the patient took the medicine.</p>
+</section>
+<section class="card">
+<h2>4 · AI-style summary (mock)</h2>
+<p class="muted">Rule-based demonstration text, not a real AI model and not medical advice.</p>
+<button class="btn" id="summarize">Generate summary</button>
+<div id="summary" class="summary">Add or review demo records, then generate a summary.</div>
+</section>
+</div>
+<div class="grid" style="margin-top:16px">
+<section class="card"><h2>Patient timeline</h2><p class="muted">Fictional records only. Events are stored in this browser tab and disappear when reset.</p><div id="timeline"></div><button class="btn secondary" id="reset">Reset demo</button></section>
+<section class="card"><h2>Design principles</h2><div class="event"><strong>Prescription ≠ dispensing</strong><p>What was ordered and what was supplied are different events.</p></div><div class="event"><strong>Dispensing ≠ ingestion</strong><p>Do not infer that a patient took a medicine from a pharmacy record.</p></div><div class="event"><strong>AI supports clinicians</strong><p>Summaries should show sources, dates, uncertainty, and missing data.</p></div><div class="event"><strong>QR is not a public medical file</strong><p>Real access requires provider authentication, least privilege, expiry, and revocation.</p></div></section>
+</div>
+<div class="footer">Meditrace concept prototype · no network requests · no persistence beyond this page session · synthetic examples only.</div>
+</main>
+<script>
+const state={events:[],prescriptions:[],dispenses:[],token:null};
+const $=id=>document.getElementById(id);
+const now=()=>new Date().toLocaleString();
+function render(){
+ $('timeline').innerHTML=state.events.length?state.events.slice().reverse().map(e=>'<div class="event"><strong>'+esc(e.title)+'</strong><small>'+esc(e.time)+'</small><p>'+esc(e.detail)+'</p><span class="pill">'+esc(e.type)+'</span></div>').join(''):'<p class="muted">No events yet. Try adding a demo prescription.</p>';
+ $('rxSelect').innerHTML=state.prescriptions.length?state.prescriptions.map((r,i)=>'<option value="'+i+'">'+esc(r.name)+' — prescribed '+r.qty+'</option>').join(''):'<option value="">No prescription yet</option>';
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function addEvent(type,title,detail){state.events.push({type,title,detail,time:now()});render();}
+$('makeToken').onclick=()=>{const token='DEMO-'+Math.random().toString(36).slice(2,10).toUpperCase();const expiry=Date.now()+Number($('hours').value)*3600000;state.token={token,role:$('role').value,expiry,revoked:false};$('qr').textContent='SIMULATED TOKEN: '+token;$('tokenStatus').textContent='Mock access for '+state.token.role+' until '+new Date(expiry).toLocaleString()+'. This is not a scannable or secure QR.';addEvent('Consent simulation','Demo token generated','Role: '+state.token.role+'. Expiry: '+new Date(expiry).toLocaleString()+'. No real access was granted.');};
+$('revoke').onclick=()=>{if(!state.token){$('tokenStatus').textContent='There is no token to revoke.';return;}state.token.revoked=true;$('tokenStatus').textContent='Mock token marked revoked. No real session existed.';addEvent('Consent simulation','Demo token revoked','The mock token is marked revoked in this page only.');};
+$('addPrescription').onclick=()=>{const name=$('medicine').value.trim();const qty=Number($('qty').value);const symptom=$('symptom').value.trim();if(!name||!Number.isFinite(qty)||qty<1){alert('Enter a medicine label and quantity greater than zero.');return;}const r={name,qty,id:'rx-'+(state.prescriptions.length+1),symptom};state.prescriptions.push(r);addEvent('Prescription','Prescribed: '+name,'Quantity prescribed: '+qty+'. Visit note: '+(symptom||'not entered')+'. Fictional demo only.');};
+$('dispense').onclick=()=>{const idx=Number($('rxSelect').value);const rx=state.prescriptions[idx];const qty=Number($('dispensed').value);if(!rx||!Number.isFinite(qty)||qty<0){alert('Add a prescription first and enter a valid quantity.');return;}const d={rxId:rx.id,name:rx.name,qty};state.dispenses.push(d);const status=qty===0?'no dispensing recorded by this demo pharmacy':qty<rx.qty?'partial dispensing':'quantity equals or exceeds prescribed quantity';addEvent('Pharmacy dispensing', 'Dispensing record: '+rx.name,'Quantity recorded: '+qty+'. Status: '+status+'. This does not prove ingestion.');};
+$('summarize').onclick=()=>{if(!state.events.length){$('summary').textContent='No records available yet. Add a fictional visit or prescription first.';return;}const lines=[];const prescriptions=state.prescriptions;const dispenses=state.dispenses;lines.push('This is a rule-based summary of fictional records entered in this demo.');if(state.events.some(e=>e.type==='Prescription'))lines.push('Prescriptions recorded: '+prescriptions.map(r=>r.name+' ('+r.qty+' prescribed)').join('; ')+'.');for(const r of prescriptions){const ds=dispenses.filter(d=>d.rxId===r.id);if(!ds.length)lines.push('No dispensing event is recorded in this demo for '+r.name+'. This does not prove the medicine was not obtained or taken.');else{const total=ds.reduce((a,d)=>a+d.qty,0);lines.push('Recorded dispensing for '+r.name+': '+total+' total against '+r.qty+' prescribed. Confirm context and any additional fills with the patient.');}}lines.push('A real Meditrace AI summary must link every material claim to dated source records and be reviewed by a qualified clinician.');$('summary').textContent=lines.join(' ');};
+$('reset').onclick=()=>{state.events=[];state.prescriptions=[];state.dispenses=[];state.token=null;$('qr').textContent='No demo token generated.';$('tokenStatus').textContent='No active token.';$('summary').textContent='Add or review demo records, then generate a summary.';render();};
+render();
+</script>
+</body></html>
