@@ -2,6 +2,10 @@
 
 **AI-powered, QR-based healthcare records and medication tracking.**
 
+> **If you clone this repository to recover the project context, start with the [Knowledge Base Index](docs/README.md).** It links the product overview, architecture diagrams, feature catalogue, decision log, security guidance, roadmap, examples, pitch, and interactive mock demo.
+
+[Open interactive concept demo](demo/index.html) · [Architecture diagrams](docs/ARCHITECTURE.md) · [Feature catalogue](docs/FEATURE_CATALOG.md) · [Open decisions](docs/DECISIONS_AND_OPEN_QUESTIONS.md)
+
 Meditrace helps patients maintain a continuous medical history and share the right information with healthcare providers through patient-controlled, time-limited QR consent. It is designed with privacy, offline access, and the needs of people in areas with unreliable internet in mind.
 
 > **Core idea:** One patient-controlled digital medical history that connects consultations, prescriptions, pharmacy dispensing, lab reports, and AI-generated summaries—so each new healthcare provider does not have to reconstruct the patient's story from scratch.
@@ -41,14 +45,23 @@ Meditrace gives a patient a digital medical record and a QR-based way to grant a
 
 ## Product documentation
 
-- [Product overview, workflows, MVP, safety, and roadmap](docs/PRODUCT_OVERVIEW.md)
-- [Hackathon and fundraising pitch copy](docs/PITCH.md)
-- [Healthcare record system requirements](.kiro/specs/healthcare-record-system/requirements.md)
-- [Healthcare record system design](.kiro/specs/healthcare-record-system/design.md)
+- [Knowledge base index](docs/README.md)
+- [Product overview](docs/PRODUCT_OVERVIEW.md)
+- [Architecture and diagrams](docs/ARCHITECTURE.md)
+- [Feature catalogue](docs/FEATURE_CATALOG.md)
+- [Decisions and open questions](docs/DECISIONS_AND_OPEN_QUESTIONS.md)
+- [Security and clinical safety](docs/SECURITY_AND_SAFETY.md)
+- [Roadmap and test plan](docs/ROADMAP.md)
+- [Worked examples](docs/EXAMPLES.md)
+- [Hackathon and fundraising pitch](docs/PITCH.md)
+- [Fictional sample data](examples/sample-patient.json)
+- [Interactive concept demo](demo/index.html)
+- [Original requirements](.kiro/specs/healthcare-record-system/requirements.md)
+- [Original technical design](.kiro/specs/healthcare-record-system/design.md)
 
 ## Proposed technical direction
 
-The current design specification describes a mobile application with a role-based interface, local SQLite storage, encrypted file storage for reports, consent/session management, barcode scanning, and optional encrypted cloud backup (Google Drive is named as a possible backup provider). Potential frontend choices discussed for a broader product include Flutter or React Native; potential backend choices include Node.js or Django; PostgreSQL or MongoDB were also considered. These are options, not a claim that all have already been implemented.
+The existing design specification describes a mobile application with a role-based interface, local SQLite storage, encrypted file storage for reports, consent/session management, barcode scanning, and optional encrypted cloud backup (Google Drive is named as a possible backup provider). Potential frontend choices discussed for a broader product include Flutter or React Native; potential backend choices include Node.js or Django; PostgreSQL or MongoDB were also considered. These are options, not a claim that all have already been implemented.
 
 ## Responsible use and privacy
 
@@ -56,8 +69,8 @@ Medical data is highly sensitive. Production use requires strong identity verifi
 
 ## Status
 
-This repository includes product requirements and a design specification. Features described as future or proposed should not be assumed to be implemented, clinically validated, compliant, or production-ready until verified in the codebase and tested.
+The repository contains original product requirements/design, product documentation, and an explicitly illustrative browser demo. The demo does not implement real authentication, QR authorization, encryption, backend exchange, or medical AI. Features described as proposed/future must not be assumed implemented, clinically validated, compliant, or production-ready until verified in source code and tests.
 
 ## Pitch
 
-**Meditrace is an AI-powered, QR-based healthcare ecosystem that helps patients, doctors, pharmacies, and laboratories maintain a connected medical history. It distinguishes prescribed medicines from medicines actually dispensed and creates concise, clinician-reviewed summaries to support faster, better-informed consultations and continuity of care.**
+**Meditrace is an AI-powered, QR-based healthcare ecosystem that helps patients, doctors, pharmacies, and laboratories maintain a connected medical history. It distinguishes prescribed medicines from medicines actually dispensed and creates concise, source-linked summaries for clinician review to support better-informed consultations and continuity of care.**
